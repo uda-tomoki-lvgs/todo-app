@@ -1,0 +1,211 @@
+html,
+body,
+:root {
+    margin: 0;
+    min-height: 100vh;
+    height: auto;
+}
+
+html,
+input,
+button {
+    font-family: "hiragino kaku gothic proN";
+}
+
+body {
+    color: #333333;
+}
+
+.site-wrapper {
+    background-color: #f7f7f7;
+    height: 100%;
+    min-height: 100vh;
+}
+
+.logo {
+    font-family: "Arial Black";
+    font-size: 40px;
+    color: #ffffff;
+    background-color: #13b481;
+    padding: 12px 16px;
+}
+
+.logo > .app-name {
+    font-size: 40px;
+}
+
+.logo > .app-subname {
+    margin-left: 5px;
+    font-size: 16px;
+}
+
+.todo-form {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+    height: 32px;
+}
+
+.todo-form-wrapper {
+    width: 100%;
+}
+
+.todo-form-input {
+    font-size: 1rem;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+}
+
+.todo-form-underline {
+    position: relative;
+    border-top: 2px solid #c2c2c2;
+}
+
+.todo-form-underline::before,
+.todo-form-underline::after {
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    content: "";
+    background-color: #1c8866;
+    transition: all 0.5s;
+}
+
+.todo-form-underline::before {
+    left: 50%;
+}
+
+.todo-form-underline::after {
+    right: 50%;
+}
+
+.todo-form-input:focus + .todo-form-underline::before,
+.todo-form-input:focus + .todo-form-underline::after {
+    width: 50%;
+}
+
+.normal-button {
+    width: 4.1rem;
+    height: 32px;
+    padding: 0 1rem;
+    border: 0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #ffffff;
+    background-color: #1c8866;
+    cursor: pointer;
+}
+
+.normal-button:hover {
+    filter: brightness(0.9);
+}
+
+.main-wrapper {
+    padding: 0 28px;
+    padding-bottom: 24px;
+}
+
+.list-of-tasks {
+    font-size: 24px;
+    padding: 8px 0;
+}
+
+.form-wrapper {
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.todolist-wrapper {
+    border: 1px solid #e6e6e6;
+    box-shadow: 0 1px 5px #eeeeee;
+    border-radius: 3px;
+    margin-top: 32px;
+}
+
+.todolist-header {
+    background-color: #e6e6e6;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+}
+
+.todolist-body {
+    padding: 16px;
+}
+
+.single-todo-wrapper {
+    display: flex;
+    justify-content: space-between;
+    border-top: solid 1px #adadad;
+    padding: 0 12px;
+}
+
+.todo-text {
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin: 15px 0;
+    margin-right: 1rem;
+    padding: 0;
+    border: none;
+    background-color: inherit;
+    text-align: left;
+}
+
+.todo-checked {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+}
+
+.todo-button-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-button {
+    width: 50px;
+    height: 28px;
+    border: 0;
+    border-radius: 4px;
+    color: #ffffff;
+    background-color: #4f98d8;
+    cursor: pointer;
+}
+
+.delete-button {
+    width: 50px;
+    height: 28px;
+    border: 0;
+    border-radius: 4px;
+    color: #ffffff;
+    background-color: #d85867;
+    cursor: pointer;
+}
+
+.todo-edit-input {
+    outline: 0;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    font-size: 0.9rem;
+    margin: 15px 0;
+    margin-right: 1rem;
+}
+
+.blinking:not(:focus) {
+    animation: blink 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

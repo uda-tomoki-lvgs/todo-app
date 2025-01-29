@@ -1,0 +1,56 @@
+services:
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        volumes:
+            - ./frontend:/app
+        ports:
+            - 3000:3000
+        command: sh -c "npm run dev"
+        depends_on:
+            - backend
+        networks:
+            my-network:
+                ipv4_address: 172.18.0.10
+
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        volumes:
+            - ./backend:/app
+        ports:
+            - 8000:8000
+        command: sh -c "npm run dev"
+        depends_on:
+            - database
+        networks:
+            my-network:
+                ipv4_address: 172.18.0.20
+
+    database:
+        image: mysql:lts
+        environment:
+            - MYSQL_ROOT_PASSWORD=password
+            - MYSQL_DATABASE=dbname
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=password
+        ports:
+            - 3306:3306
+        volumes:
+            - todo_app_db:/var/lib/mysql
+        networks:
+            my-network:
+                ipv4_address: 172.18.0.30
+
+volumes:
+    todo_app_db:
+        driver: local
+
+networks:
+    my-network:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.18.0.0/24
