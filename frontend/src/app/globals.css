@@ -129,6 +129,8 @@ body {
 }
 
 .todolist-header {
+    display: flex;
+    justify-content: space-between;
     background-color: #e6e6e6;
     font-size: 1.1rem;
     padding: 0.5rem 1rem;
@@ -159,6 +161,10 @@ body {
 .todo-checked {
     text-decoration: line-through;
     text-decoration-thickness: 2px;
+}
+
+.todo-text:hover {
+    opacity: 0.6;
 }
 
 .todo-button-wrapper {
@@ -208,4 +214,20 @@ body {
     100% {
         opacity: 1;
     }
+}
+
+.right-header-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.hide-checked-wrapper {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.hide-checked-wrapper > * {
+    cursor: pointer;
+    user-select: none;
 }
