@@ -1,5 +1,3 @@
-import "@/app/globals.css";
-
 const Logo = () => {
     return (
         <div className="logo">
