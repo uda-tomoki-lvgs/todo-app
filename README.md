@@ -1,2 +1,5 @@
-node のバージョン v23.6.1
-volume にマウントするので、ホスト側で npm install, npm ci する必要あり
+環境構築
+docker compose up -d --build
+
+イメージからコンテナを起動
+docker compose up -d

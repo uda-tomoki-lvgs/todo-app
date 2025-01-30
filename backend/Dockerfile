@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 node:current
+FROM --platform=linux/arm64 node:23.6.1
 WORKDIR /app
 COPY package.json .
 COPY package-lock.json .
