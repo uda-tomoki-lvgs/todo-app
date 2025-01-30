@@ -123,7 +123,7 @@ const Todo = ({ todo }: TodoProps) => {
         </div>
     ) : (
         <div className="single-todo-wrapper">
-            {todo.done_flg ? (
+            {todo.done_flag ? (
                 <button
                     className="todo-text todo-checked"
                     onClick={() => handleDoneFlag(todo.id)}

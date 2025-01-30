@@ -1,4 +1,4 @@
-import { query } from "@/database/pool.ts";
+import { query } from "./pool.ts";
 
 export const addNewTask = async (user_id: number, task: string) => {
     await query("INSERT INTO tasks (user_id, task) VALUES (?, ?)", [
@@ -24,7 +24,7 @@ export const deleteTask = async (user_id: number, id: number) => {
 
 export const changeTaskState = async (user_id: number, id: number) => {
     await query(
-        "UPDATE tasks SET done_flg = NOT done_flg WHERE user_id = ? AND id = ?",
+        "UPDATE tasks SET done_flag = NOT done_flag WHERE user_id = ? AND id = ?",
         [user_id, id]
     );
 };

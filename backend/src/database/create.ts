@@ -1,4 +1,4 @@
-import { query, existTable } from "@/database/pool.ts";
+import { query, existTable } from "./pool.ts";
 
 export const createNewTable = async (
     tableName: string,

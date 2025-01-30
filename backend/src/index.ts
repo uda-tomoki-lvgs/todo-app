@@ -1,14 +1,14 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { createNewTable } from "@/database/create.ts";
-import { readAllTasks } from "@/database/read.ts";
+import { createNewTable } from "./database/create.ts";
+import { readAllTasks } from "./database/read.ts";
 import {
     addNewTask,
     updateTask,
     deleteTask,
     changeTaskState,
-} from "@/database/write.ts";
+} from "./database/write.ts";
 
 const app = new Hono();
 
@@ -27,8 +27,9 @@ await createNewTable(
         id INT NOT NULL AUTO_INCREMENT,
         user_id INT NOT NULL,
         task VARCHAR(10000) NOT NULL,
-        time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        done_flg BOOLEAN NOT NULL DEFAULT FALSE,
+        done_flag BOOLEAN NOT NULL DEFAULT FALSE,
+        created_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
         FOREIGN KEY (user_id) REFERENCES users (id)
     )`
