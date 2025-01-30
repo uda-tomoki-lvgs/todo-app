@@ -6,9 +6,13 @@ interface TodoListProps {
 }
 
 const TodoList = ({ todos }: TodoListProps) => {
+    const restTask = todos.reduce((acc: number, todo: TodoType): number => {
+        return !todo.done_flag ? acc + 1 : acc;
+    }, 0);
+
     return (
         <div className="todolist-wrapper">
-            <div className="todolist-header">残りタスク {todos.length}個</div>
+            <div className="todolist-header">残りタスク {restTask}個</div>
             <div className="todolist-body">
                 {todos.map((todo) => (
                     <Todo key={todo.id} todo={todo} />
