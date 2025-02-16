@@ -1,6 +1,6 @@
 "use client";
 
-import { Todo as TodoType } from "@/app/types/todo";
+import { TodoType } from "@/app/types/todo";
 import { z } from "zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";

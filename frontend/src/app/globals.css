@@ -22,12 +22,15 @@ body {
     min-height: 100vh;
 }
 
-.logo {
-    font-family: "Arial Black";
-    font-size: 40px;
-    color: #ffffff;
+.header-wrapper {
+    display: flex;
     background-color: #13b481;
     padding: 12px 16px;
+}
+
+.logo {
+    font-family: "Arial Black";
+    color: #ffffff;
 }
 
 .logo > .app-name {
