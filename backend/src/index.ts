@@ -66,6 +66,7 @@ await createNewTable(
 		user_id BIGINT NOT NULL,
         name VARCHAR(255) NOT NULL,
 		email VARCHAR(255),
+		picture VARCHAR(511),
         PRIMARY KEY (id),
 		UNIQUE KEY (user_id)
     )`
@@ -177,9 +178,8 @@ app.get('/auth/success', async (c) => {
 	oauth2client.setCredentials(tokens);
 	userCredential = tokens;
 
-	console.log(code);
-	console.log('access_token', userCredential.access_token);
-	console.log('refresh_token', userCredential.refresh_token);
+	// ユーザー情報をSQLに登録
+	const user = await verifyGoogleToken();
 
 	return c.redirect('http://localhost:826/');
 });
