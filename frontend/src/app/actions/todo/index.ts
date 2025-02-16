@@ -1,7 +1,6 @@
-import { Todo } from "@/app/types/todo";
+import { TodoType } from "@/app/types/todo";
 
-const getAllTodos = async (): Promise<Todo[]> => {
-    console.log(`${process.env.HOST}/api/todos`);
+const getAllTodos = async (): Promise<TodoType[]> => {
     const response = await fetch(`${process.env.HOST}/api/todos`, {
         cache: "no-store",
     });

@@ -1,5 +1,6 @@
 import { serve } from "@hono/node-server";
-import { Hono } from "hono";
+import { Hono, type Context } from "hono";
+import type { BlankEnv, BlankInput } from "hono/types";
 import { cors } from "hono/cors";
 import { createNewTable } from "./database/create.ts";
 import { readAllTasks } from "./database/read.ts";
@@ -13,9 +14,17 @@ import { google } from "googleapis";
 
 import * as dotenv from "dotenv";
 import { HTTPException } from "hono/http-exception";
+import { error } from "console";
 dotenv.config();
 
 const app = new Hono();
+
+// Google OAuth 2.0
+const oauth2client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URL
+);
 
 interface Credentials {
     refresh_token?: string | null;
@@ -24,6 +33,26 @@ interface Credentials {
     token_type?: string | null;
     id_token?: string | null;
     scope?: string;
+}
+
+export interface TokenPayload {
+    iss: string;
+    at_hash?: string;
+    email_verified?: boolean;
+    sub: string;
+    azp?: string;
+    email?: string;
+    profile?: string;
+    picture?: string;
+    name?: string;
+    given_name?: string;
+    family_name?: string;
+    aud: string;
+    iat: number;
+    exp: number;
+    nonce?: string;
+    hd?: string;
+    locale?: string;
 }
 
 // アクセストークンを保持する変数
@@ -114,13 +143,8 @@ app.put("/api/todos/:id/change-task-state", async (c) => {
     return c.json(200);
 });
 
-// google認証
+// googleアカウントでログイン
 app.get("/auth/login", async (c) => {
-    const oauth2client = new google.auth.OAuth2(
-        process.env.GOOGLE_CLIENT_ID,
-        process.env.GOOGLE_CLIENT_SECRET,
-        process.env.GOOGLE_REDIRECT_URL
-    );
     const authorizationUrl = oauth2client.generateAuthUrl({
         access_type: "offline", // リフレッシュトークンを取得
         scope: [
@@ -132,14 +156,14 @@ app.get("/auth/login", async (c) => {
     return c.redirect(authorizationUrl);
 });
 
+// googleアカウントからログアウト
+app.get("/auth/logout", async (c) => {
+    userCredential = {};
+    return c.json(200);
+});
+
 // 認証成功したらリダイレクト
 app.get("/auth/success", async (c) => {
-    const oauth2client = new google.auth.OAuth2(
-        process.env.GOOGLE_CLIENT_ID,
-        process.env.GOOGLE_CLIENT_SECRET,
-        process.env.GOOGLE_REDIRECT_URL
-    );
-
     const code: string | undefined = c.req.query("code");
     if (code === undefined) {
         throw new HTTPException(500, { message: "cannot auth google account" });
@@ -156,15 +180,61 @@ app.get("/auth/success", async (c) => {
     return c.redirect("http://localhost:826/");
 });
 
-// メールアドレスとユーザー名を取得
-app.get("/auth/userinfo", async (c) => {
-    return c.json(200);
+// トークンを送信して有効なアカウントか確認(JWT認証)
+// Google Auth 2.0は、id_tokenメソッドがJWTになる
+// そのJWTをGoogle側のエンドポイントに送信して検証
+const verifyGoogleToken = async (): Promise<TokenPayload | null> => {
+    try {
+        if (
+            userCredential.id_token === undefined ||
+            userCredential.id_token === null
+        ) {
+            return null;
+        }
+
+        // Google IDトークンを認証
+        const ticket = await oauth2client.verifyIdToken({
+            idToken: userCredential.id_token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        // トークンが有効ならデコードした情報を返す
+        const payload = ticket.getPayload();
+        if (payload === undefined) return null;
+
+        return payload;
+    } catch (err) {
+        return null;
+    }
+};
+
+// ログインされているか確認
+app.get("/auth/status", async (c) => {
+    const user = await verifyGoogleToken();
+    console.log(user);
+    if (user !== null) {
+        return c.json({ message: "Login" }, 200);
+    } else {
+        return c.json({ message: "Logout" }, 401);
+    }
 });
 
+// メールアドレスとユーザー名、アイコンを取得
+app.get("/auth/userinfo", async (c) => {
+    const payload = await verifyGoogleToken();
+    if (payload === null) return c.json({ status: "logout" }, 200);
+    const userInfo = {
+        email: payload.email,
+        name: payload.name,
+        picture: payload.picture,
+    };
+    return c.json({ status: "login", payload: userInfo }, 200);
+});
+
+// HTTPサーバを起動
 const port = 2025;
 console.log(`Server is running on http://localhost:${port}`);
-
 serve({
-    fetch: app.fetch,
-    port,
+    fetch: app.fetch, // HTTPリクエスト解析関数
+    port: port, // ポート番号
 });

@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Todo as TodoType } from "@/app/types/todo";
+import { TodoType } from "@/app/types/todo";
 import Todo from "@/app/components/todo";
+import { useGetAllTodos } from "@/app/hooks/useGetAllTodos";
 
-interface TodoListProps {
-    todos: TodoType[];
-}
+const TodoList = () => {
+    // Todoを取得
+    const { todos } = useGetAllTodos();
 
-const TodoList = ({ todos }: TodoListProps) => {
     // 完了したタスクを非表示にするか
     const [isHideCheckedTasks, setIsHideCheckedTasks] =
         useState<boolean>(false);
@@ -24,7 +24,7 @@ const TodoList = ({ todos }: TodoListProps) => {
     const handleSortOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedSortOption(event.target.value);
     };
-    const sortTodoList = () => {
+    const sortTodoList = (todos: TodoType[]) => {
         console.log(selectedSortOption);
         if (selectedSortOption === "new-create") {
             todos = todos.sort(
@@ -56,7 +56,13 @@ const TodoList = ({ todos }: TodoListProps) => {
             todos = todos.sort((a, b) => b.task.localeCompare(a.task));
         }
     };
-    sortTodoList();
+
+    // Todoが取得するまでは非表示
+    if (todos === null) {
+        return <div className="todolist-wrapper"></div>;
+    }
+    
+    sortTodoList(todos);
 
     // Propsから残りタスク数を算出
     const restTask = todos.reduce((acc: number, todo: TodoType): number => {
