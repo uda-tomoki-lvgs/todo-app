@@ -63,27 +63,31 @@ await createNewTable(
 	'users',
 	`CREATE TABLE users (
         id INT NOT NULL AUTO_INCREMENT,
-        name VARCHAR(100) NOT NULL,
-        PRIMARY KEY (id)
+		user_id BIGINT NOT NULL,
+        name VARCHAR(255) NOT NULL,
+		email VARCHAR(255),
+        PRIMARY KEY (id),
+		UNIQUE KEY (user_id)
     )`
 );
 await createNewTable(
 	'tasks',
 	`CREATE TABLE tasks (
         id INT NOT NULL AUTO_INCREMENT,
-        user_id INT NOT NULL,
-        task VARCHAR(10000) NOT NULL,
+        user_id BIGINT NOT NULL,
+        task VARCHAR(1023) NOT NULL,
         done_flag BOOLEAN NOT NULL DEFAULT FALSE,
         created_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        FOREIGN KEY (user_id) REFERENCES users (id)
+		UNIQUE KEY (user_id),
+        FOREIGN KEY (user_id) REFERENCES users (user_id)
     )`
 );
 
 // データベースからタスクをロード
 // これを自在に変えられるようにしたい
-// usersテーブルをid, name, email, ハッシュ化されたpassword
+// usersテーブルをid, name, email
 const user_id = 1;
 
 // フロントエンドからのCORSを許可
@@ -232,7 +236,6 @@ app.get('/auth/userinfo', async (c) => {
 });
 
 // HTTPサーバを起動
-console.log(`Server is running on http://localhost:${port}`);
 serve({
 	fetch: app.fetch,
 	port: Number(process.env.HONO_PORT),
