@@ -1,44 +1,44 @@
 services:
-    frontend:
-        build:
-            context: ./frontend
-            dockerfile: Dockerfile
-        environment:
-            - CHOKIDAR_USEPOLLING=value
-        volumes:
-            - ./frontend:/app
-        ports:
-            - 826:826
-        command: sh -c "npm run dev"
-        depends_on:
-            - backend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - CHOKIDAR_USEPOLLING=value
+    volumes:
+      - ./frontend:/app
+    ports:
+      - 826:826
+    command: sh -c "npm run dev"
+    depends_on:
+      - backend
 
-    backend:
-        build:
-            context: ./backend
-            dockerfile: Dockerfile
-        environment:
-            - CHOKIDAR_USEPOLLING=value
-        volumes:
-            - ./backend:/app
-        ports:
-            - 2025:2025
-        command: sh -c "npm run dev"
-        depends_on:
-            - database
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - CHOKIDAR_USEPOLLING=value
+    volumes:
+      - ./backend:/app
+    ports:
+      - 2025:2025
+    command: sh -c "npm run dev"
+    depends_on:
+      - database
 
-    database:
-        image: mysql:lts
-        environment:
-            - MYSQL_ROOT_PASSWORD=password
-            - MYSQL_DATABASE=dbname
-            - MYSQL_USER=user
-            - MYSQL_PASSWORD=password
-        ports:
-            - 2026:2026
-        volumes:
-            - todo_app_db:/var/lib/mysql
+  database:
+    image: mysql:lts
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=dbname
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    ports:
+      - 3306:3306
+    volumes:
+      - todo_app_db:/var/lib/mysql
 
 volumes:
-    todo_app_db:
-        driver: local
+  todo_app_db:
+    driver: local
