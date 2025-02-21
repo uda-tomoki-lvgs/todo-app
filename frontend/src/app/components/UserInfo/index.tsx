@@ -1,12 +1,12 @@
 "use client";
 
-import { UserInfoContext } from "@/app/hooks/useUserInfo";
+import { UserInfoContext, useUserInfo } from "@/app/hooks/useUserInfo";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
 const UserInfo = () => {
     const router = useRouter();
-    const userInfo = useContext(UserInfoContext);
+    const { userInfo } = useUserInfo();
 
     // Google認証する
     const handleLogin = async () => {
@@ -27,7 +27,7 @@ const UserInfo = () => {
                 }
             );
             if (response.ok) {
-                window.location.reload();
+                router.refresh();
             }
         } catch (error) {
             console.error(error);

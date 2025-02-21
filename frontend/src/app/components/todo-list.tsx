@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { TodoType } from "@/app/types/todo";
 import Todo from "@/app/components/todo";
-import { useGetAllTodos } from "@/app/hooks/useGetAllTodos";
 
-const TodoList = () => {
-    // Todoを取得
-    const { todos } = useGetAllTodos();
+type TodoTypeProps = {
+    todos: TodoType[];
+};
 
+const TodoList = ({ todos }: TodoTypeProps) => {
     // 完了したタスクを非表示にするか
     const [isHideCheckedTasks, setIsHideCheckedTasks] =
         useState<boolean>(false);
@@ -61,7 +61,7 @@ const TodoList = () => {
     if (todos === null) {
         return <div className="todolist-wrapper"></div>;
     }
-    
+
     sortTodoList(todos);
 
     // Propsから残りタスク数を算出

@@ -35,7 +35,7 @@ services:
       - MYSQL_USER=user
       - MYSQL_PASSWORD=password
     ports:
-      - 3306:3306
+      - 2026:2026
     volumes:
       - todo_app_db:/var/lib/mysql
 

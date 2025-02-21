@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Router from "next/router";
 
 interface TodoProps {
     todo: TodoType;
@@ -46,8 +47,8 @@ const Todo = ({ todo }: TodoProps) => {
             if (!response.ok) {
                 throw new Error("サーバエラーが発生しました。");
             }
-            router.refresh();
             setIsEditing(false);
+            router.refresh();
         } catch (error) {
             console.error("フォーム送信エラー:", error);
         }
