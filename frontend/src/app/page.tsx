@@ -12,7 +12,7 @@ const Home = async () => {
         <div className="site-wrapper">
             <div className="header-wrapper">
                 <Logo />
-                <UserInfo />
+                {/* <UserInfo /> */}
             </div>
             <div className="main-wrapper">
                 <div className="list-of-tasks">タスク一覧</div>
